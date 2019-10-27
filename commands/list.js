@@ -20,9 +20,18 @@ module.exports = {
               category: args[0]
             },
             order: [['id', 'ASC']],
-            attributes: ['id', 'name']
+            attributes: ['id', 'name', 'duration', 'counter']
           });
-          const tagString = tagList.map(t => `${t.id}. ${t.name}`).join('\n') || `There are no ${args[0]}s.`;
+          const tagString =
+            tagList
+              .map(t => {
+                if (t.duration && moment(t.duration).isAfter(new Date())) {
+                  updateMoment();
+                  return `${tag.id}. ${tag.name} - ${moment().to(tag.duration)}`;
+                }
+                return `${tag.id}. ${tag.name} - ${tag.counter}`;
+              })
+              .join('\n') || `There are no ${args[0]}s.`;
           embed
             .setTitle(`List of ${args[0]}`)
             .setDescription(tagString)
