@@ -4,7 +4,7 @@ const Item = require('../models/item');
 
 const firstOptions = ['rule', 'points'];
 
-async function rule(args) {
+async function rule(args, embed) {
   return new Promise(resolve => {
     if (args.length >= 3) {
       Item.find({}, (err, items) => {
@@ -40,7 +40,7 @@ async function rule(args) {
   });
 }
 
-async function points(args) {
+async function points(args, embed) {
   return new Promise(resolve => {
     if (args.length == 2) {
       const id = parseInt(args[1]);
@@ -67,9 +67,9 @@ module.exports = {
         // If there's only one arg or this one arg is not on the first options.
         embed = functions.setEmbedIncorrect(embed, module.exports.name);
       } else if (args[0] == 'points') {
-        embed = await points(args);
+        embed = await points(args, embed);
       } else {
-        embed = await rule(args);
+        embed = await rule(args, embed);
       }
     } catch (err) {
       return functions.setEmbedError(embed, err);
