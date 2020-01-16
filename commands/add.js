@@ -4,17 +4,22 @@ const Item = require('../models/item');
 
 const firstOptions = ['rule', 'points'];
 
-async function rule(args, embed) {
+async function rule(args, embed, message) {
   return new Promise(resolve => {
     if (args.length >= 3) {
+      message.channel.send('args length okay');
       Item.find({}, (err, items) => {
         if (err || !items || items.length == 0) resolve(functions.setEmbedError(embed, err));
+
+        message.channel.send(`Item.find okay: ${items.join(', ')}`);
 
         items.sort((item1, item2) => {
           if (item1.id > item2.id) return -1;
           if (item1.id < item2.id) return 1;
           return 0;
         });
+
+        message.channel.send(`items.sort okay: ${items.join(', ')}`);
 
         const id = parseInt(items[0].id) + 1;
         const points = parseInt(args[1]);
@@ -71,7 +76,8 @@ module.exports = {
       } else if (args[0] == 'points') {
         embed = await points(args, embed);
       } else {
-        embed = await rule(args, embed);
+        message.channel.send('rule detected');
+        embed = await rule(args, embed, message);
       }
     } catch (err) {
       return functions.setEmbedError(embed, err);
