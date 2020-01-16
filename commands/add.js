@@ -8,7 +8,7 @@ async function rule(args, embed) {
   return new Promise(resolve => {
     if (args.length >= 3) {
       Item.find({}, (err, items) => {
-        if (err) resolve(functions.setEmbedError(embed, err));
+        if (err || !items || items.length == 0) resolve(functions.setEmbedError(embed, err));
 
         items.sort((item1, item2) => {
           if (item1.id > item2.id) return -1;
@@ -16,7 +16,7 @@ async function rule(args, embed) {
           return 0;
         });
 
-        const id = items[0].id + 1;
+        const id = parseInt(items[0].id) + 1;
         const points = parseInt(args[1]);
         const name = Array(args)
           .slice(2)
