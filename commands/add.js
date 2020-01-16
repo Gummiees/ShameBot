@@ -22,6 +22,8 @@ async function rule(args, embed) {
           .slice(2)
           .join(' ');
 
+        resolve(embed.setDescription(`id: ${id}, points: ${points}, name: ${name}`).setColor(0x0ac930));
+
         const item = new Item({
           id: id,
           name: name,
