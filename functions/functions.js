@@ -1,13 +1,14 @@
-module.exports = function getUserFromMention(client, mention) {
-  // The id is the first and only match found by the RegEx.
-  const matches = mention.match(/^<@!?(\d+)>$/);
-
-  // If supplied variable was not a mention, matches will be null instead of an array.
-  if (!matches) return;
-
-  // However the first element in the matches array will be the entire mention, not just the ID,
-  // so use index 1.
-  const id = matches[1];
-
-  return client.users.get(id);
+module.exports = {
+  setEmbedIncorrect: function(embed, commandName) {
+    return embed
+      .setTitle('Not correct')
+      .setDescription(`The command is not correct! Type \`!${commandName}\` or \`!help\`.`)
+      .setColor(0xffc20d);
+  },
+  setEmbedError: function(embed, err) {
+    embed
+      .setTitle('Error')
+      .setDescription(`Something went wrong. ${JSON.stringify(err)}`)
+      .setColor(0xc90a0a);
+  }
 };

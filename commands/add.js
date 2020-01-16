@@ -1,91 +1,75 @@
 const { RichEmbed } = require('discord.js');
-const moment = require('moment');
+const functions = require('../functions/functions');
+const Item = require('../models/item');
 
-const myDatabase = require('../database/database.js');
-
-const myDatabaseInstance = new myDatabase();
-const Tags = myDatabaseInstance.defineDatabase();
+const firstOptions = ['rule', 'points'];
 
 module.exports = {
   name: 'add',
   cooldown: 2,
-  description: `Adds a ${global.categories.join(', ')}.`,
+  description: `Adds a rule or point.`,
+  async rule(args) {
+    if (args.length >= 3) {
+      Item.find({}, (err, items) => {
+        if (err) return functions.setEmbedError(embed, err);
+
+        items.sort((item1, item2) => {
+          if (item1.id > item2.id) return -1;
+          if (item1.id < item2.id) return 1;
+          return 0;
+        });
+
+        const id = items[0].id + 1;
+        const points = parseInt(args[1]);
+        const name = Array(args)
+          .slice(2)
+          .join(' ');
+
+        const item = new Item({
+          id: id,
+          name: name,
+          points: points,
+          counter: 0
+        });
+
+        item.save(err => {
+          if (err) return functions.setEmbedError(embed, err);
+          return embed.setDescription(`Added successfully.`).setColor(0x0ac930);
+        });
+      });
+    } else {
+      return functions.setEmbedIncorrect(embed, module.exports.name);
+    }
+  },
+  async points(args) {
+    if (args.length == 2) {
+      const id = parseInt(args[1]);
+      Item.findOneAndUpdate({ id: id }, { $inc: { counter: 1 } }, (err, items) => {
+        if (err) return functions.setEmbedError(embed, err);
+        return embed.setDescription(`Added successfully.`).setColor(0x0ac930);
+      });
+    } else {
+      return functions.setEmbedIncorrect(embed, module.exports.name);
+    }
+  },
   async execute(message, client, args) {
     let embed = new RichEmbed();
     try {
       if (args.length == 0) {
         embed
           .setTitle('Info')
-          .setDescription(`!add  _id of the ${global.categories.join('/')}_ _needs more info!_`)
+          .setDescription(`\`!add [rule|points] [points|ID] [description]\``)
           .setColor(0x0aa0c9);
-      } else if (isNaN(args[0])) {
-        embed
-          .setTitle('Not a number')
-          .setDescription(`The first argument must be a number!`)
-          .setColor(0xffc20d);
-      } else if (args.length == 1) {
-        // add counterr !add 1
-        const tag = await Tags.findOne({ where: { id: parseInt(args[0]) } });
-        if (tag) {
-          await Tags.update({ duration: null, counter: tag.counter + 1 }, { where: { id: parseInt(args[0]) } });
-          embed.setDescription(`Added one correctly.`).setColor(0x0ac930);
-        } else {
-          embed
-            .setTitle('Not found')
-            .setDescription(`Could not find a tag with the ID '${args[0]}'`)
-            .setColor(0xffc20d);
-        }
-      } else if (isNaN(args[1])) {
-        embed
-          .setTitle('Not a number')
-          .setDescription(`The second argument must be a number!`)
-          .setColor(0xffc20d);
+      } else if (args.length < 2 || !firstOptions.find(opt => opt == args[0]) || isNaN(args[1])) {
+        // If there's only one arg or this one arg is not on the first options.
+        embed = functions.setEmbedIncorrect(embed, module.exports.name);
+      } else if (args[0] == 'points') {
+        embed = await module.exports.points(args);
       } else {
-        if (args.length == 2) {
-          // add counter !add 1 2
-          const id = parseInt(args[0]);
-          const counts = parseInt(args[1]);
-          const tag = await Tags.findOne({ where: { id: id } });
-          if (tag) {
-            await Tags.update({ duration: null, counter: tag.counter + counts }, { where: { id: id } });
-            embed.setDescription(`Added ${counts} correctly.`).setColor(0x0ac930);
-          } else {
-            embed
-              .setTitle('Not found')
-              .setDescription(`Could not find a tag with the ID '${args[0]}'`)
-              .setColor(0xffc20d);
-          }
-        } else if (args.length == 3) {
-          // add timer !add 1 2 days
-          const id = parseInt(args[0]);
-          const number = parseInt(args[1]);
-          const tag = await Tags.findOne({ where: { id: id } });
-          let date;
-          if (tag) {
-            if (tag.duration) {
-              // add to the one that already exists
-              date = moment(tag.duration).add(number, args[2]);
-            } else {
-              // create a new one
-              date = moment().add(moment.duration(number, args[2]).asMilliseconds());
-            }
-            await Tags.update({ duration: date, counter: 0 }, { where: { id: id } });
-            embed.setDescription(`Added ${number} ${args[2]} correctly.`).setColor(0x0ac930);
-          } else {
-            embed
-              .setTitle('Not found')
-              .setDescription(`Could not find a tag with the ID '${args[0]}'`)
-              .setColor(0xffc20d);
-          }
-        } else {
-          embed.setDescription(`Too many arguments!`).setColor(0xffc20d);
-        }
+        embed = await module.exports.rule(args);
       }
-    } catch (e) {
-      embed
-        .setTitle('Error')
-        .setDescription(`Something went wrong. ${JSON.stringify(e)}`)
-        .setColor(0xc90a0a);
+    } catch (err) {
+      return functions.setEmbedError(embed, err);
     }
 
     message.channel.send(embed);
