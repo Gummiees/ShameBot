@@ -11,20 +11,22 @@ async function rule(args, embed, message) {
       Item.find({}, (err, items) => {
         message.channel.send(`items: ${items}`);
         if (err || !items) resolve(functions.setEmbedError(embed, err));
-        const arrayItems = Array(items);
-        message.channel.send(`arrayItems: ${arrayItems}`);
-        if (arrayItems.length == 0)
-          resolve(functions.setEmbedError(embed, err));
+        let lastItem = null;
+        if (Array.isArray(items)) {
+          if (items.length == 0) resolve(functions.setEmbedError(embed, err));
 
-        arrayItems.sort((item1, item2) => {
-          if (item1.id > item2.id) return -1;
-          if (item1.id < item2.id) return 1;
-          return 0;
-        });
+          items.sort((item1, item2) => {
+            if (item1.id > item2.id) return -1;
+            if (item1.id < item2.id) return 1;
+            return 0;
+          });
+          message.channel.send(`items: ${items}`);
+          lastItem = items[0];
+        } else {
+          lastItem = items;
+        }
 
-        message.channel.send(`arrayItems.sort okay: ${arrayItems.join(", ")}`);
-
-        const id = parseInt(arrayItems[0].id) + 1;
+        const id = parseInt(lastItem.id) + 1;
         const points = parseInt(args[1]);
         const name = Array(args)
           .slice(2)
