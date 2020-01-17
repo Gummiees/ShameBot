@@ -9,7 +9,6 @@ async function rule(args, embed, message) {
     if (args.length >= 3) {
       message.channel.send("args length okay");
       Item.find({}, (err, items) => {
-        message.channel.send(`items: ${items}`);
         if (err || !items) resolve(functions.setEmbedError(embed, err));
         let lastItem = null;
         if (Array.isArray(items)) {
@@ -20,11 +19,13 @@ async function rule(args, embed, message) {
             if (item1.id < item2.id) return 1;
             return 0;
           });
-          message.channel.send(`items: ${items}`);
+          message.channel.send(`items is array: ${items}`);
           lastItem = items[0];
         } else {
           lastItem = items;
+          message.channel.send(`items is object: ${items}`);
         }
+        message.channel.send(`lastItem: ${lastItem}`);
 
         const id = parseInt(lastItem.id) + 1;
         const points = parseInt(args[1]);
@@ -32,11 +33,7 @@ async function rule(args, embed, message) {
           .slice(2)
           .join(" ");
 
-        resolve(
-          embed
-            .setDescription(`id: ${id}, points: ${points}, name: ${name}`)
-            .setColor(0x0ac930)
-        );
+        message.channel.send(`id: ${id}, points: ${points}, name: ${name}`);
 
         const item = new Item({
           id: id,
