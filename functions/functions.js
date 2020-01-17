@@ -1,4 +1,5 @@
-import Unsplash, { toJson } from 'unsplash-js';
+const { toJson } = require('unsplash-js');
+const Unsplash = require('unsplash-js');
 
 const UNSPLASH_ACCESS_KEY = process.env.unsplash_access;
 const UNSPLASH_SECRET_EY = process.env.unsplash_secret;
