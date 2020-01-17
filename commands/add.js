@@ -7,32 +7,30 @@ const firstOptions = ["rule", "points"];
 async function rule(args, embed, message) {
   return new Promise(resolve => {
     if (args.length >= 3) {
-      message.channel.send("args length okay");
       Item.find({}, (err, items) => {
         if (err || !items) resolve(functions.setEmbedError(embed, err));
-        let lastItem = null;
-        if (Array.isArray(items)) {
-          if (items.length == 0) resolve(functions.setEmbedError(embed, err));
 
-          items.sort((item1, item2) => {
-            if (item1.id > item2.id) return -1;
-            if (item1.id < item2.id) return 1;
-            return 0;
-          });
-          message.channel.send(`items is array: ${items}`);
-          lastItem = items[0];
-        } else {
-          lastItem = items;
-          message.channel.send(`items is object: ${items}`);
-        }
-        message.channel.send(`lastItem: ${lastItem}`);
+        if (items.length == 0) resolve(functions.setEmbedError(embed, err));
 
-        const id = parseInt(lastItem.id) + 1;
+        items.sort((item1, item2) => {
+          if (item1.id > item2.id) return -1;
+          if (item1.id < item2.id) return 1;
+          return 0;
+        });
+        message.channel.send(`items is array: ${items.join(" ")}`);
+
+        const id = parseInt(items[0].id) + 1;
         const points = parseInt(args[1]);
         const name = Array(args)
           .slice(2)
           .join(" ");
 
+        message.channel.send(`args: ${Array(args).join(", ")}`);
+        message.channel.send(
+          `args slice(2): ${Array(args)
+            .slice(2)
+            .join(", ")}`
+        );
         message.channel.send(`id: ${id}, points: ${points}, name: ${name}`);
 
         const item = new Item({
