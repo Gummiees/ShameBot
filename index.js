@@ -1,9 +1,10 @@
 const { Client, Collection } = require('discord.js');
 const { prefix } = require('./config.json');
-
 const fs = require('fs');
 const mongoose = require('mongoose');
 const http = require('http');
+const fetch = require('node-fetch');
+global.fetch = fetch;
 
 const token = process.env.token;
 const MONGODB_URI = process.env.MONGODB_URI;
@@ -18,13 +19,13 @@ http
   })
   .listen(4000);
 
+// DATABASE STUFF
 mongoose.connect(MONGODB_URI);
 mongoose.Promise = global.Promise;
 const db = mongoose.connection;
 db.on('error', console.error.bind(console, 'MongoDB connection error:'));
 
-// When connected, discord functionalities start
-
+// DISCORD STUFF
 const client = new Client();
 const cooldowns = new Collection();
 client.commands = new Collection();
