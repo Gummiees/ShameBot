@@ -21,9 +21,7 @@ async function rule(args, embed, message) {
 
         const id = parseInt(items[0].id) + 1;
         const points = parseInt(args[1]);
-        const name = Array(args)
-          .splice(0, 2)
-          .join(" ");
+        const name = args.splice(0, 2).join(" ");
         message.channel.send(`id: ${id}, points: ${points}, name: ${name}`);
 
         const item = new Item({
