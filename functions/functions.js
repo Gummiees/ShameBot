@@ -1,10 +1,11 @@
-const Unsplash = require('unsplash-js').default;
+import Unsplash, { toJson } from 'unsplash-js';
+
 const UNSPLASH_ACCESS_KEY = process.env.unsplash_access;
+const UNSPLASH_SECRET_EY = process.env.unsplash_secret;
 
 module.exports = {
   async setEmbedIncorrect(embed, commandName) {
     embed.setDescription(`The command is not correct! Type \`!${commandName}\` or \`!help\`.`).setColor(0xffc20d);
-
     return await module.exports.setRandomLlamaImage(embed);
   },
   async setEmbedError(embed, err) {
@@ -17,7 +18,11 @@ module.exports = {
   },
   async setRandomLlamaImage(embed) {
     // IMAGE API STUFF
-    const unsplash = new Unsplash({ accessKey: UNSPLASH_ACCESS_KEY });
+
+    const unsplash = new Unsplash({
+      accessKey: UNSPLASH_ACCESS_KEY,
+      secret: UNSPLASH_SECRET_EY
+    });
     unsplash.users.profile('naoufal').catch(err => console.error.bind(console, 'unsplash connection error:'));
 
     jsonImage = await unsplash.photos.getRandomPhoto({ query: 'llama', orientation: 'squarish' }).then(toJson);
