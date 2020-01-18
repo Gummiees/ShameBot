@@ -9,7 +9,7 @@ module.exports = {
   async execute(message, client, args) {
     let embed = new RichEmbed();
     try {
-      Item.find({}, async (err, items) => {
+      await Item.find({}, async (err, items) => {
         if (err || !items || items.length == 0) resolve(await functions.setEmbedError(embed, err || 'no items found.'));
 
         items.sort((item1, item2) => {
