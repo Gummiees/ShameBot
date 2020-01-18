@@ -8,9 +8,7 @@ async function rule(args, embed) {
   return new Promise(async resolve => {
     if (args.length >= 3) {
       Item.find({}, async (err, items) => {
-        if (err || !items) resolve(await functions.setEmbedError(embed, err));
-
-        if (items.length == 0) resolve(await functions.setEmbedError(embed, err));
+        if (err || !items || items.length == 0) resolve(await functions.setEmbedError(embed, err || 'no items found.'));
 
         items.sort((item1, item2) => {
           if (item1.id > item2.id) return -1;
