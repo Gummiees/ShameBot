@@ -13,12 +13,26 @@ module.exports = {
         if (err || !items || items.length == 0) resolve(await functions.setEmbedError(embed, err || 'no items found.'));
 
         items.sort((item1, item2) => {
+          if (item1.points > item2.points) return 1;
+          if (item1.points < item2.points) return -1;
           if (item1.id > item2.id) return 1;
           if (item1.id < item2.id) return -1;
           return 0;
         });
 
-        const description = items.map(item => `${item.id}. ${item.name} - ${item.points}`).join('\n');
+        let lastItem = null;
+        let description = '';
+        items.forEach(item => {
+          if (!lastItem || lastItem.points != item.points) {
+            if (!lastItem) {
+              description += `\n`;
+            }
+            description += `${item.points} POINTS\n`;
+          }
+          description += `${item.id}. ${item.name}\n`;
+          lastItem = item;
+        });
+
         embed
           .setTitle('List of rules [ID - Description - Points]')
           .setDescription(description)
