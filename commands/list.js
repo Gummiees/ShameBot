@@ -34,7 +34,7 @@ module.exports = {
         });
 
         embed
-          .setTitle('List of rules [(ID. Description)')
+          .setTitle('List of rules (ID. Description)')
           .setDescription(description)
           .setColor(0x0aa0c9);
         embed = await functions.setRandomLlamaImage(embed);
