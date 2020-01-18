@@ -25,7 +25,7 @@ module.exports = {
         items.forEach(item => {
           if (!lastItem || lastItem.points != item.points) {
             if (lastItem) {
-              description += `\n----------------------\n`;
+              description += `\n`;
             }
             description += `**${item.points} POINTS**\n`;
           }
