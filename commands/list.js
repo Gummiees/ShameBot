@@ -24,17 +24,17 @@ module.exports = {
         let description = '';
         items.forEach(item => {
           if (!lastItem || lastItem.points != item.points) {
-            if (!lastItem) {
-              description += `\n`;
+            if (lastItem) {
+              description += `\n----------------------\n`;
             }
-            description += `${item.points} POINTS\n`;
+            description += `**${item.points} POINTS**\n`;
           }
           description += `${item.id}. ${item.name}\n`;
           lastItem = item;
         });
 
         embed
-          .setTitle('List of rules [ID - Description - Points]')
+          .setTitle('List of rules [(ID. Description)')
           .setDescription(description)
           .setColor(0x0aa0c9);
         embed = await functions.setRandomLlamaImage(embed);
