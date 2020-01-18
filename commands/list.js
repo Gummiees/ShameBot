@@ -19,7 +19,6 @@ module.exports = {
         });
 
         const description = items.map(item => `${item.id}. ${item.name} - ${item.points}`).join('\n');
-        message.channel.send(`description: ${description}`);
         embed
           .setTitle('List of rules [ID - Description - Points]')
           .setDescription(description)
