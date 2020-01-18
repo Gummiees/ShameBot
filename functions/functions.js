@@ -6,7 +6,7 @@ const UNSPLASH_SECRET_EY = process.env.unsplash_secret;
 
 module.exports = {
   async setEmbedIncorrect(embed, commandName) {
-    embed.setDescription(`The command is not correct! Type \`!${commandName}\` or \`!help\`.`).setColor(0xffc20d);
+    embed.setDescription(`The command is not correct! Type \`_${commandName}\` or \`_help\`.`).setColor(0xffc20d);
     return await module.exports.setRandomLlamaImage(embed);
   },
   async setEmbedError(embed, err) {

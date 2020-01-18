@@ -66,7 +66,7 @@ module.exports = {
     let embed = new RichEmbed();
     try {
       if (args.length == 0) {
-        embed.setDescription(`!add [rule|points] [points|ID] [description]`).setColor(0x0aa0c9);
+        embed.setDescription(`_add [rule|points] [points|ID] [description]`).setColor(0x0aa0c9);
         embed = await functions.setRandomLlamaImage(embed);
       } else if (args.length < 2 || !firstOptions.find(opt => opt == args[0]) || isNaN(args[1])) {
         // If there's only one arg or this one arg is not on the first options.
