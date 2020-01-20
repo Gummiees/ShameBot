@@ -46,7 +46,7 @@ db.once('open', () => {
     if (message.content.toLowerCase().includes('cringe')) {
       // const blush_emoji = client.emojis.find(emoji => emoji.name === 'blush_1');
       // message.channel.send(`${blush_emoji}`);
-      message.channel.send(`Saying cringe is pretty cringe tbh`);
+      // message.channel.send(`Saying cringe is pretty cringe tbh`);
     }
     if (!message.content.startsWith(prefix) || message.author.bot) return;
 
