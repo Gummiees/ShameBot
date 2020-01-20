@@ -30,7 +30,7 @@ module.exports = {
             }
             description += `**${item.points} POINTS**\n`;
           }
-          description += `${item.id}. ${item.name}\n - x${item.counter} = ${item.points * item.counter}`;
+          description += `${item.id}. ${item.name} - x${item.counter} = ${item.points * item.counter}\n`;
           total += item.points * item.counter;
           lastItem = item;
         });
