@@ -25,7 +25,7 @@ module.exports = {
       secret: UNSPLASH_SECRET_EY
     });
     unsplash.users.profile('naoufal').catch(err => console.error.bind(console, 'unsplash connection error:'));
-
+    return embed;
     jsonImage = await unsplash.photos.getRandomPhoto({ query: 'llama', orientation: 'squarish' }).then(toJson);
     return embed.setImage(jsonImage.urls.thumb);
   }
