@@ -4,6 +4,7 @@ const Item = require('../models/item');
 
 module.exports = {
   name: 'count',
+  aliases: ['total'],
   cooldown: 2,
   description: `Counts the total of points.`,
   async execute(message, client, args) {
@@ -30,15 +31,15 @@ module.exports = {
             }
             description += `**${item.points} POINTS**\n`;
           }
-          description += `${item.id}. ${item.name} - x${item.counter} = ${item.points * item.counter}\n`;
+          description += `${item.id}. ${item.name} - ${item.counter}\n`;
           total += item.points * item.counter;
           lastItem = item;
         });
 
         embed
-          .setTitle('List of rules (ID. Description xCounter = total points)')
+          .setTitle('List of rules (ID. Description - Counter)')
           .setDescription(description)
-          .setFooter(`Total: ${total}`)
+          .addField(null, `Total: ${total}`)
           .setColor(0x0aa0c9);
         embed = await functions.setRandomLlamaImage(embed);
       });
