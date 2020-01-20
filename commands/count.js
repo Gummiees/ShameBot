@@ -39,7 +39,7 @@ module.exports = {
         embed
           .setTitle('List of rules (ID. Description - Counter)')
           .setDescription(description)
-          .addField(null, `Total: ${total}`)
+          .addField('', `**Total: ${total} points**`)
           .setColor(0x0aa0c9);
         embed = await functions.setRandomLlamaImage(embed);
       });
