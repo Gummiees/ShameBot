@@ -43,9 +43,8 @@ db.once('open', () => {
   });
 
   function commands(message) {
-    if (message.content.contains('cringe')) {
-      const command = client.commands.get('cringe');
-      command.execute(message);
+    if (message.content.includes('cringe')) {
+      message.channel.send(':blush_1:');
     }
     if (!message.content.startsWith(prefix) || message.author.bot) return;
 
