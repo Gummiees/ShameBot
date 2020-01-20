@@ -3,7 +3,7 @@ const functions = require('../functions/functions');
 const Item = require('../models/item');
 
 module.exports = {
-  name: 'count total',
+  name: 'count',
   cooldown: 2,
   description: `Counts the total of points.`,
   async execute(message, client, args) {
